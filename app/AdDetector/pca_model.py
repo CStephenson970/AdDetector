@@ -22,9 +22,13 @@ class SVM_PCA_model(object):
         with open('/home/sine/Dropbox/AdDetector/data/cleaned_articles.pickle','rb') as handle:
             self.articles = pickle.load(handle)
         
+        with open('models/svm_pca_thursday_week_2.pickle','rb') as handle:
+            self.model = pickle.load(handle)
+        
         self.vocabulary = self.create_vocab()
         self.feature_words,self.corpus_frequency = self.get_corpus_info()
         self.feature_frame = self.create_feature_frame()
+        self.pca = self.create_pca_transformer()
         
     def tokenize_text(self,text):
         """
@@ -133,7 +137,37 @@ class SVM_PCA_model(object):
 
         return feature_frame
     
+    def create_pca_transformer(self):
+        pca_frame = self.feature_frame
+        del pca_frame['is_ad']
+        components = 10
+        pca = PCA(n_components=components)
+        pca.fit(pca_frame)
+        return pca
+
+    def transform_feature(self,feature_vector):
+        np_vec = np.zeros((1,len(feature_vector)))
+        np_vec[0] = feature_vector
+        pca_vector = self.pca.transform(np_vec)
+        return pca_vector
+
+    def classifier(self,x_in):
+        predictions = self.model.predict_proba(x_in)
+        classes = []
+        for prediction in predictions:
+            classes.append(prediction[1])
+        return classes
+
+    def evaluate_text(self,text):
+        _,vec = self.get_features(text)
+        transformed_vec = self.transform_feature(vec)
+        print(transformed_vec)
+        inpt = np.zeros((1,len(transformed_vec[0])))
+        inpt[0] = transformed_vec[0]
+        return self.classifier(inpt)[0]
+    
 if __name__ == '__main__':
     model = SVM_PCA_model()
-    test_text = "this is some trial text to see if tf idf function is working properly"
-    print(model.get_tf_idf(test_text))
+    test_text = "This is some test text to see if things are working"
+    _,vec = model.get_features(test_text)
+    print(model.evaluate_text(test_text))
