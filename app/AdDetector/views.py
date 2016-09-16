@@ -1,22 +1,10 @@
 from flask import render_template
 from flask import request
 from AdDetector import app
-from classes import AdDetectorModel_svm
+from pca_model import SVM_PCA_model
 import cPickle as pickle
 
-#Build the model here!
-    #Load the data
-with open('./AdDetector/data/cleaned_ads.pickle','rb') as handle:
-    ads = pickle.load(handle)
-        
-with open('./AdDetector/data/cleaned_articles.pickle','rb') as handle:
-    articles = pickle.load(handle)
-
-with open('./AdDetector/models/svm_model.pickle','rb') as handle:
-   svm_model = pickle.load(handle)
-
-admodel = AdDetectorModel_svm(articles,ads,max_vocab_size=100)
-admodel.load_model(svm_model)
+admodel = SVM_PCA_model()
 
 @app.route('/')
 @app.route('/index')
