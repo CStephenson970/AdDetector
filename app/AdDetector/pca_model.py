@@ -16,13 +16,13 @@ from sklearn.decomposition import PCA
 class SVM_PCA_model(object):
     def __init__(self):
         #Load the data
-        with open('data/cleaned_ads.pickle','rb') as handle:
+        with open('./AdDetector/data/cleaned_ads.pickle','rb') as handle:
             self.ads = pickle.load(handle)
                 
-        with open('data/cleaned_articles.pickle','rb') as handle:
+        with open('./AdDetector/data/cleaned_articles.pickle','rb') as handle:
             self.articles = pickle.load(handle)
         
-        with open('models/svm_pca_thursday_week_2.pickle','rb') as handle:
+        with open('./AdDetector/models/svm_pca_thursday_week_2.pickle','rb') as handle:
             self.model = pickle.load(handle)
         
         self.vocabulary = self.create_vocab()
@@ -155,7 +155,7 @@ class SVM_PCA_model(object):
         predictions = self.model.predict_proba(x_in)
         classes = []
         for prediction in predictions:
-            classes.append(prediction[1])
+            classes.append(prediction)
         return classes
 
     def evaluate_text(self,text):
