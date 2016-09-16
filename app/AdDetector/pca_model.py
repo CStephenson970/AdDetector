@@ -16,10 +16,10 @@ from sklearn.decomposition import PCA
 class SVM_PCA_model(object):
     def __init__(self):
         #Load the data
-        with open('/home/sine/Dropbox/AdDetector/data/cleaned_ads.pickle','rb') as handle:
+        with open('data/cleaned_ads.pickle','rb') as handle:
             self.ads = pickle.load(handle)
                 
-        with open('/home/sine/Dropbox/AdDetector/data/cleaned_articles.pickle','rb') as handle:
+        with open('data/cleaned_articles.pickle','rb') as handle:
             self.articles = pickle.load(handle)
         
         with open('models/svm_pca_thursday_week_2.pickle','rb') as handle:
@@ -161,13 +161,12 @@ class SVM_PCA_model(object):
     def evaluate_text(self,text):
         _,vec = self.get_features(text)
         transformed_vec = self.transform_feature(vec)
-        print(transformed_vec)
         inpt = np.zeros((1,len(transformed_vec[0])))
         inpt[0] = transformed_vec[0]
         return self.classifier(inpt)[0]
     
 if __name__ == '__main__':
     model = SVM_PCA_model()
-    test_text = "This is some test text to see if things are working"
+    test_text = "This is some test text to see if things are working properly"
     _,vec = model.get_features(test_text)
     print(model.evaluate_text(test_text))
