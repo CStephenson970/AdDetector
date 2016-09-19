@@ -71,5 +71,6 @@ def get_output():
     page_html = render_template("output_page.html",result_str=result_str,
                                 qualifier=qualifier,
                                 most_ad_like=worst,
-                                least_ad_like=best)
+                                least_ad_like=best,
+                                processed_text=article_text)
     return page_html
