@@ -39,5 +39,7 @@ def get_output():
     else:
        qualifier = "I'm " + str(confidence) + "%" + " sure about it."
        
-    page_html = render_template("output_page.html",result_str=result_str,qualifier=qualifier)
+    best,worst = admodel.get_best_worst(input_text)
+    
+    page_html = render_template("output_page.html",result_str=result_str,qualifier=qualifier,most_ad_like=worst,least_ad_like=best)
     return page_html

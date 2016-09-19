@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>AdDetector</title>
+    <title>AdDetect</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">AdDetector</a>
+          <a class="navbar-brand" href="#">AdDetect</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -48,6 +48,11 @@
             <div class="starter-template">
               <p class="lead">I read what you put in and I think {{result_str}}<br>
               {{qualifier}}</p>
+              <p>The most ad-like sentence was:<br>
+              "{{most_ad_like}}"</p>
+              <p>The least ad-like sentence was:<br>
+              "{{least_ad_like}}"</p>
+              </p>
             <a href="http://localhost:5000/">Try again?</a>
             </div>
           
