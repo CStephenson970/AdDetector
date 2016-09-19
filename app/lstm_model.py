@@ -6,6 +6,8 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
+from nltk.data import load
+
 
 from keras.models import load_model
 from keras.preprocessing import sequence
@@ -19,6 +21,7 @@ class lstm_model(object):
             self.word_ids = pickle.load(handle)
             
         self.model = load_model('./AdDetector/models/lstm_model_500.h5')
+        self.sentence_tokenizer = load('tokenizers/punkt/english.pickle')
         
     def tokenize_text(self,text):
         """
@@ -63,7 +66,24 @@ class lstm_model(object):
         inpt = sequence.pad_sequences(inpt, maxlen=self.max_text_length)
         ad_prob = self.model.predict(inpt)[0,0]
         return [1-ad_prob,ad_prob]
-
+    
+    def score_sentences(self,text):
+        sentences = self.sentence_tokenizer(text)
+        sentence_scores = {}
+        for sentence in sentences:
+            evalu = self.evaluate_text(sentence)
+            sentence_scores[sentence] = evalu[1]
+        return sentence_scores
+    
+    def get_best_worst(text):
+        sentence_scores = self.score_sentences(text)
+        sentences = []
+        for sentence in sorted(sentence_scores, key=sentence_scores.get, reverse=True):
+            sentences.append(sentence)
+        worst_sentence = sentences[0]
+        best_sentence = sentences[-1]
+        return best_sentence, worst_sentence
+    
 if __name__ == '__main__':
     model = lstm_model()
     text = "this is some sample text to see if things are working properly"
