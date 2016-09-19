@@ -4,9 +4,30 @@ from AdDetector import app
 from lstm_model import lstm_model
 import cPickle as pickle
 
+from bs4 import BeautifulSoup
+import requests
+
 admodel = lstm_model()
-text = "this is some sample text to see if things are working properly"
-print(admodel.evaluate_text(text))
+test_text = "This is some sample text to see if things are working properly"
+print(admodel.evaluate_text(test_text))
+
+def get_article(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
+    response = requests.get(url, headers=headers)
+    raw_html = response.content
+    
+    soup = BeautifulSoup(raw_html,"lxml")
+    lines = soup.find_all('p')
+    
+    hr_lines = []
+    for line in lines:
+        text = line.get_text()
+        hr_lines.append(text)
+    
+    article = ' '.join(hr_lines)
+    return article    
+
 
 @app.route('/')
 @app.route('/index')
@@ -17,9 +38,15 @@ def index():
 
 @app.route('/output')
 def get_output():
+    input_url = request.args.get('url_input')
     input_text = request.args.get('text_input')
-    print(input_text)
-    result = admodel.evaluate_text(input_text)
+
+    if len(input_url) > 0:
+        article_text = get_article(input_url)
+    else:
+        article_text = input_text
+        
+    result = admodel.evaluate_text(article_text)
     
     is_ad = False
     if result[0] < 0.5:
@@ -39,7 +66,10 @@ def get_output():
     else:
        qualifier = "I'm " + str(confidence) + "%" + " sure about it."
        
-    best,worst = admodel.get_best_worst(input_text)
+    best,worst = admodel.get_best_worst(article_text)
     
-    page_html = render_template("output_page.html",result_str=result_str,qualifier=qualifier,most_ad_like=worst,least_ad_like=best)
+    page_html = render_template("output_page.html",result_str=result_str,
+                                qualifier=qualifier,
+                                most_ad_like=worst,
+                                least_ad_like=best)
     return page_html
