@@ -46,12 +46,16 @@
         
             <div class="starter-template">
                 <h2>AdDetect</h2>
-                <p>Enter some text</p>
             </div>
         
             <div class = "container">
         
               <form  action="/output" method="GET">
+                <p>Enter a URL</p>
+                <div class="form-group">
+                    <textarea rows="1" cols="50" id="url_input" name='url_input'></textarea>
+                </div>
+                <p>Or enter some text</p>
                 <div class="form-group">
                     <textarea rows="15" cols="50" id="text_input" name='text_input'></textarea>
                 </div>
