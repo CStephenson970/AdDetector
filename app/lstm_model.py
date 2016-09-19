@@ -68,14 +68,14 @@ class lstm_model(object):
         return [1-ad_prob,ad_prob]
     
     def score_sentences(self,text):
-        sentences = self.sentence_tokenizer(text)
+        sentences = self.sentence_tokenizer.tokenize(text)
         sentence_scores = {}
         for sentence in sentences:
             evalu = self.evaluate_text(sentence)
             sentence_scores[sentence] = evalu[1]
         return sentence_scores
     
-    def get_best_worst(text):
+    def get_best_worst(self,text):
         sentence_scores = self.score_sentences(text)
         sentences = []
         for sentence in sorted(sentence_scores, key=sentence_scores.get, reverse=True):
