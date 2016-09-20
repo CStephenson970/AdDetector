@@ -71,8 +71,10 @@ class lstm_model(object):
         sentences = self.sentence_tokenizer.tokenize(text)
         sentence_scores = {}
         for sentence in sentences:
-            evalu = self.evaluate_text(sentence)
-            sentence_scores[sentence] = evalu[1]
+            num_tokens = len(self.tokenize_text(sentence))
+            if num_tokens > 1:
+                evalu = self.evaluate_text(sentence)
+                sentence_scores[sentence] = evalu[1]
         return sentence_scores
     
     def get_best_worst(self,text):
