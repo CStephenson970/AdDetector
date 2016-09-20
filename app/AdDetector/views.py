@@ -12,6 +12,7 @@ test_text = "This is some sample text to see if things are working properly"
 print(admodel.evaluate_text(test_text))
 
 def get_article(url):
+    url = "https://boilerpipe-web.appspot.com/extract?url=" + url + "&extractor=ArticleExtractor&output=htmlFragment&extractImages=&token="
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
     response = requests.get(url, headers=headers)
