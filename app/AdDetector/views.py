@@ -4,29 +4,27 @@ from AdDetector import app
 from lstm_model import lstm_model
 import cPickle as pickle
 
-from bs4 import BeautifulSoup
 import requests
+import justext
 
 admodel = lstm_model()
 test_text = "This is some sample text to see if things are working properly"
 print(admodel.evaluate_text(test_text))
 
 def get_article(url):
-    url = "https://boilerpipe-web.appspot.com/extract?url=" + url + "&extractor=ArticleExtractor&output=htmlFragment&extractImages=&token="
+    #url = "https://boilerpipe-web.appspot.com/extract?url=" + url + "&extractor=ArticleExtractor&output=htmlFragment&extractImages=&token="
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
     response = requests.get(url, headers=headers)
     raw_html = response.content
     
-    soup = BeautifulSoup(raw_html,"lxml")
-    lines = soup.find_all('p')
+    article = ''
+    paragraphs = justext.justext(response.content, justext.get_stoplist("English"))
     
-    hr_lines = []
-    for line in lines:
-        text = line.get_text()
-        hr_lines.append(text)
+    for paragraph in paragraphs:
+        if not paragraph.is_boilerplate:
+            article += ' ' + paragraph.text
     
-    article = ' '.join(hr_lines)
     return article    
 
 
