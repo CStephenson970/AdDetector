@@ -88,8 +88,13 @@ class lstm_model(object):
         sentences = []
         for sentence in sorted(sentence_scores, key=sentence_scores.get, reverse=True):
             sentences.append(sentence)
+        
+        if len(sentences) == 0:
+            return "",""
+        
         worst_sentence = sentences[0]
         best_sentence = sentences[-1]
+        
         return best_sentence, worst_sentence
     
 if __name__ == '__main__':

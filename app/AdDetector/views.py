@@ -87,5 +87,5 @@ def check_link():
             
     result = admodel.evaluate_text(article_text)
     
-    answer = "There is a " + str(result[1]) + " chance this is advertising."
+    answer = "There is a " + str(round(result[1],3)*100) + "% chance this is advertising."
     return answer
