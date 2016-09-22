@@ -86,6 +86,7 @@ def check_link():
         return "No article found"
             
     result = admodel.evaluate_text(article_text)
-    
-    answer = "There is a " + str(round(result[1],3)*100) + "% chance this is advertising."
-    return answer
+    ad_chance = round(result[1],3)*100
+
+    page_html = render_template("checkpage.html",ad_chance=ad_chance)
+    return page_html
