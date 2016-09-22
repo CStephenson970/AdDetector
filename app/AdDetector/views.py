@@ -44,6 +44,10 @@ def get_output():
         article_text = get_article(input_url)
     else:
         article_text = input_text
+    
+    if len(article_text) == 0:
+        page_html = render_template("null_output.html")
+        return page_html
         
     result = admodel.evaluate_text(article_text)
     

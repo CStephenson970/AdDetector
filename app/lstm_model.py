@@ -58,6 +58,9 @@ class lstm_model(object):
         """
         evaluates the model with text as the input
         """
+        if len(text) == 0:
+            return None
+        
         text = text.encode('utf-8')
         text = text.decode('utf-8').encode('ascii','ignore')
         id_list = self.get_id_list(text)
@@ -78,6 +81,9 @@ class lstm_model(object):
         return sentence_scores
     
     def get_best_worst(self,text):
+        if len(text) == 0:
+            return "",""
+        
         sentence_scores = self.score_sentences(text)
         sentences = []
         for sentence in sorted(sentence_scores, key=sentence_scores.get, reverse=True):
