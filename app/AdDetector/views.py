@@ -27,7 +27,6 @@ def get_article(url):
     
     return article    
 
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -77,3 +76,16 @@ def get_output():
                                 least_ad_like=best,
                                 processed_text=article_text)
     return page_html
+
+@app.route('/checker', methods=['POST'])
+def check_link():
+    url = request.form['url']
+    article_text = get_article(url)
+    
+    if len(article_text) == 0:
+        return "No article found"
+            
+    result = admodel.evaluate_text(article_text)
+    
+    answer = "There is a " + str(result[1]) + " chance this is advertising."
+    return answer
