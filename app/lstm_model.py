@@ -8,7 +8,6 @@ from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.data import load
 
-
 from keras.models import load_model
 from keras.preprocessing import sequence
 
@@ -73,11 +72,15 @@ class lstm_model(object):
     def score_sentences(self,text):
         sentences = self.sentence_tokenizer.tokenize(text)
         sentence_scores = {}
+        scored = " "
+        last_eval = self.evaluate_text(scored)[1]
         for sentence in sentences:
             num_tokens = len(self.tokenize_text(sentence))
             if num_tokens > 1:
-                evalu = self.evaluate_text(sentence)
-                sentence_scores[sentence] = evalu[1]
+                scored += " " + sentence
+                evalu = self.evaluate_text(scored)
+                sentence_scores[sentence] = evalu[1] - last_eval
+                last_eval = evalu[1]
         return sentence_scores
     
     def get_best_worst(self,text):
