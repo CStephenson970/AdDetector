@@ -79,10 +79,13 @@ def get_output():
 @app.route('/checker', methods=['POST'])
 def check_link():
     url = request.form['url']
-    article_text = get_article(url)
+    try:
+        article_text = get_article(url)
+    except:
+        return render_template("badcheck.html")
     
     if len(article_text) == 0:
-        return "No article found"
+        return render_template("badcheck.html")
             
     result = admodel.evaluate_text(article_text)
     ad_chance = round(result[1],3)*100
