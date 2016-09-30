@@ -51,10 +51,10 @@ def get_output():
     result = admodel.evaluate_text(article_text)
     
     is_ad = False
-    if result[0] < 0.5:
+    if result[0] <= 0.5:
        result_str = "This looks like sponsored content!"
        is_ad = True
-    else:
+    if result[0] > 0.5:
        result_str = "This looks like a regular article!"
        is_ad = False
     
