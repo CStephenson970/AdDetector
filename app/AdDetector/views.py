@@ -52,10 +52,10 @@ def get_output():
     
     is_ad = False
     if result[0] < 0.5:
-       result_str = "it's advertising!"
+       result_str = "This looks like sponsored content!"
        is_ad = True
     else:
-       result_str = "it's not advertising!"
+       result_str = "This looks like a regular article!"
        is_ad = False
     
     if is_ad == True:
