@@ -89,6 +89,10 @@ def check_link():
             
     result = admodel.evaluate_text(article_text)
     ad_chance = round(result[1],3)*100
-
-    page_html = render_template("checkpage.html",ad_chance=ad_chance)
+    if ad_chance >= 0.5:
+        response_str = "This looks like sponsored content!"
+    if ad_chance < 0.5:
+        response_str = "This looks like a regular article!"
+        
+    page_html = render_template("checkpage.html",response_str=response_str)
     return page_html
