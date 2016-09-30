@@ -62,16 +62,10 @@ def get_output():
        confidence = round(result[1],3)*100
     if is_ad == False:
        confidence = round(result[0],3)*100
-    
-    if  0.3 < result[0] < 0.7:
-       qualifier = "But I'm only " + str(confidence) + "%" + " sure about it."
-    else:
-       qualifier = "I'm " + str(confidence) + "%" + " sure about it."
        
     best,worst = admodel.get_best_worst(article_text)
     
     page_html = render_template("output_page.html",result_str=result_str,
-                                qualifier=qualifier,
                                 most_ad_like=worst,
                                 processed_text=article_text)
     return page_html
