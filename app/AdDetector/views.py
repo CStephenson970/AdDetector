@@ -44,7 +44,7 @@ def get_output():
     else:
         article_text = input_text
     
-    if len(article_text) == 0:
+    if len(article_text) <= 5:
         page_html = render_template("null_output.html")
         return page_html
         
